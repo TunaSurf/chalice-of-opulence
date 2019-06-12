@@ -1,25 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function App() {
+  const [data, setData] = useState(null);
+  const apiKey = "97fc526fc8de40e99ade55b6a813780d";
+
+  useEffect(() => {
+    axios
+      .get(
+        "https://www.bungie.net/platform/Destiny/Manifest/InventoryItem/1274330687/",
+        {
+          headers: {
+            "X-API-Key": apiKey
+          }
+        }
+      )
+      .then(res => {
+        console.log(res);
+        setData(res);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <h1>Chalice of Opulence</h1>
+      {data && <p>{data.data.Response.data.inventoryItem.itemName}</p>}
+    </>
   );
 }
 
